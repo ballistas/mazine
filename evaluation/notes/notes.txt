@@ -1,0 +1,3 @@
+*GIT*
+
+in ertser Stufe, alle Module in ein Git-Repo
