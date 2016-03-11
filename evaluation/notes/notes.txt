@@ -1,3 +1,26 @@
 *GIT*
 
 in ertser Stufe, alle Module in ein Git-Repo
+
+erstellen der package.json
+> npm init
+
+installation der dev-dependencies, schreiben in package.json
+> npm install gulp --save-dev
+> npm install typescript --save-dev
+> npm install gulp-typescript --save-dev
+> npm install jasmine-core --save-dev
+
+Typescript definition
+install tsd CLI (global)
+> npm install tsd -g
+> tsd init
+> tsd install jasmine --save
+
+Verzeichnis-Struktur
+* dev
+    * src
+* dist
+    * style
+    * js
+    * jsmap
