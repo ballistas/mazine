@@ -30,3 +30,5 @@ gulp.task('test',function(){
             reporter: new reporters.TerminalReporter()
         }));
 });
+
+gulp.task('default',['compile','test']);
