@@ -2,3 +2,4 @@ node_modules
 *.iml
 /evaluation/typings
 .idea
+/evaluation/npm-debug.log
