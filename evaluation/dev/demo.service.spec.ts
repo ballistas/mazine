@@ -1,14 +1,24 @@
+import {
+    describe,
+    beforeEachProviders,
+    it,
+    expect
+} from "angular2/testing";
+
 import {DemoService} from "./demo.service";
+import {inject} from "angular2/testing";
 /**
- * Created by pakunert on 11.03.2016.
+ * Created by pakunert on 15.03.2016.
  */
 
-describe('DemoService',()=>{
 
-    let service = new DemoService();
+describe('demoService',()=>{
 
-    it('behaviour',()=>{
+    beforeEachProviders(()=>[
+        DemoService
+    ]);
 
-        expect(service).not.toBeNull();
-    });
+    it('should return "value"',inject([DemoService],(service)=>{
+        expect(service.invokeMethode()).toBe('result');
+    }));
 });
