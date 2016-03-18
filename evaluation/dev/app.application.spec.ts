@@ -1,4 +1,4 @@
-var reflect = require('reflect-metadata');
+//var reflect = require('reflect-metadata');
 
 import {App} from "./app.application";
 /**
@@ -9,7 +9,7 @@ describe('App',()=>{
 
     beforeEach(function () {
 
-        this.app = new App();
+        this.app = new App(null);
     });
 
     it('should have message "hello"',function(){

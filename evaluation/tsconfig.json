@@ -3,12 +3,14 @@
     "experimentalDecorators":true,
     "emitDecoratorMetadata":true,
     "module": "commonjs",
-    "target": "es6",
+    "moduleResolution":"node",
+    "target": "es5",
     "sourceMap": true,
     "rootDir":"dev",
     "outDir":"dist"
   },
   "exclude": [
-    "node_modules"
+    "node_modules",
+    "typings"
   ]
 }
