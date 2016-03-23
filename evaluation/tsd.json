@@ -22,6 +22,9 @@
     },
     "gulp-typescript/gulp-typescript.d.ts": {
       "commit": "552fe5d3e45ef9c8ecd3eda2b6a24d2546c438f4"
+    },
+    "youtube/youtube.d.ts": {
+      "commit": "a44529fcb1e1cdc0355e71c42a6048de99b57c34"
     }
   }
 }
