@@ -1,3 +1,4 @@
+"use strict";
 var testing_1 = require("angular2/testing");
 var demo_service_1 = require("./demo.service");
 var testing_2 = require("angular2/testing");
