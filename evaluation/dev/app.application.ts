@@ -11,9 +11,14 @@ import {
 import {HTTP_PROVIDERS} from 'angular2/http';
 import {ObservableService} from "./observable.service.demo";
 import {Movie} from "./movie.domain";
+import {YoubeAPILoader} from "./youtube.api.service";
+import {YTAPI} from "./ytapi.factory";
+import {VideoComponent} from "./video.component";
 /**
  * Created by pakunert on 14.03.2016.
  */
+
+
 
 @Component({
     selector:'app',
@@ -22,8 +27,12 @@ import {Movie} from "./movie.domain";
     <ul>
         <li *ngFor="#movie of movies">{{movie.name}}</li>
     </ul>
+    <video-comp ident="rhwaxOK1WX4"></video-comp>
+    <video-comp ident="mvXYGqNNnik"></video-comp>
+    <video-comp ident="KqF9gtCv07o"></video-comp>
     `,
-    providers:[ObservableService,HTTP_PROVIDERS]
+    providers:[ObservableService,HTTP_PROVIDERS,YTAPI],
+    directives:[VideoComponent]
 })
 export class App implements OnInit{
     message:string = 'hello';
@@ -47,7 +56,35 @@ export class App implements OnInit{
         );
     }
 
-    ngOnInit():any {
-        return undefined;
+
+    ngOnInit(){
+    /*
+        this._api.getPlayer().subscribe(
+            (player)=>{
+                console.log(
+                    `player create#1: ${player}`
+                );
+            }
+        );
+
+        this._api.getPlayer().subscribe(
+            (player)=>{
+                console.log(
+                    `player create#3: ${player}`
+                );
+            }
+        );
+
+        setTimeout(() => {
+            this._api.getPlayer('my video').subscribe(
+                (player)=>{
+                    console.log(
+                        `player create#2: ${player}`
+                    );
+                }
+            );
+        },3000);
+        */
     }
+
 }
