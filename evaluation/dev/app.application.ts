@@ -1,5 +1,6 @@
 ///<reference path="../node_modules/angular2/typings/browser.d.ts" />
 ///<reference path="../node_modules/zone.js/dist/zone.js.d.ts" />
+///<reference path='../typings/youtube/youtube.d.ts' />
 
 import "rxjs/add/operator/map";
 import "rxjs/add/operator/do";
@@ -28,8 +29,6 @@ import {VideoComponent} from "./video.component";
         <li *ngFor="#movie of movies">{{movie.name}}</li>
     </ul>
     <video-comp ident="rhwaxOK1WX4"></video-comp>
-    <video-comp ident="mvXYGqNNnik"></video-comp>
-    <video-comp ident="KqF9gtCv07o"></video-comp>
     `,
     providers:[ObservableService,HTTP_PROVIDERS,YTAPI],
     directives:[VideoComponent]

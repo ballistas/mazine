@@ -1,6 +1,8 @@
+
 /**
  * Created by pakunert on 23.03.2016.
  */
+
 import {
     Injectable
 } from 'angular2/core';
@@ -8,22 +10,33 @@ import {
 
 import * as RX from 'rxjs/Rx';
 
+declare interface Factory{
+    create(
+        video:string,
+        delegate:YT.Events
+    ):any;
+}
+
 @Injectable()
 export class YTAPI{
-    factory:{create:(string)=>any};
+    factory:Factory;
 
-    $factory:RX.Observable<{create:(string)=>any}> = RX.Observable.fromEvent(
+    $factory:RX.Observable<Factory> = RX.Observable.fromEvent(
         window,
         'yt.apiready',
         ()=>{
 
             this.factory = {
-                create:function(video:string){
+                create:function(
+                    video:string,
+                    delegate:YT.Events
+                ){
                     return new YT.Player(
                         video, {
                         height: '390',
                         width: '640',
-                        videoId: video
+                        videoId: video,
+                        events:delegate
                     });
                 }
             };
@@ -60,11 +73,12 @@ export class YTAPI{
         firstScriptTag.parentNode.insertBefore(tag, firstScriptTag);
     }
 
-    getPlayer(video:string='demo'):RX.Observable<string>{
+    getPlayer(video:string,delegate:YT.Events):RX.Observable<YT.Player>{
 
-        return this.$factory.map((factory:{create:(string)=>any})=>{
+        return this.$factory.map((factory)=>{
             return factory.create(
-                video
+                video,
+                delegate
             );
         });
     }

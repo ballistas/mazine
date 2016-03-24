@@ -6,14 +6,21 @@ import {
     Input,
     OnInit
 } from 'angular2/core';
+
+import * as RX from "rxjs/Rx";
+
 import {YTAPI} from "./ytapi.factory";
+import {Observable} from "rxjs/Observable";
 
 @Component({
     selector:'video-comp',
     template:`
-        <div>{{video}}</div>
+        <div>
+            Msg: <b *ngIf="msg">{{msg.payload}}</b>
+        </div>
         <div id='{{video}}'></div>
         <button *ngIf="player" (click)="playVideo()">play</button>
+        
     `
 })
 export class VideoComponent implements OnInit{
@@ -21,20 +28,50 @@ export class VideoComponent implements OnInit{
     private video:string;
 
     private player:any;
+    private msg:{payload:string};
+
+    private $timer:RX.Observable<{at:number,payload:any}> = RX.Observable.timer(0,1000)
+        .map((second)=>{
+
+            let keys = [
+                {at:5,payload:'Welcome!!'},
+                {at:11,payload:'Nice Coffee!!!'},
+                {at:19,payload:'Yummy Hashbrowns [LINK]'},
+                {at:26,payload:'Lets ROLL!!!'}
+            ];
+
+            for(let idx=0;idx < keys.length;idx++){
+                if(second==keys[idx].at){
+                    return keys[idx];
+                }
+            }
+
+            return null;
+        }).filter((key)=>{
+            return key!=null;
+        });
 
     constructor(private _api:YTAPI){
 
     }
 
-    playVideo(){
-        console.log('play');
-        this.player.playVideo();
-    }
-
     ngOnInit(){
 
         this._api.getPlayer(
-            this.video
+            this.video,{
+                onReady:(event)=>{
+
+                    this.$timer.subscribe(
+                        (value)=>{
+                            this.msg=value;
+                        }
+                    );
+                    event.target.playVideo();
+                },
+                onStateChange:(event)=>{
+                    console.log(`change : ${event.data}`);
+                }
+            }
         ).subscribe(
             (player)=>{
 
