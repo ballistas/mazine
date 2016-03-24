@@ -15,6 +15,7 @@ import {Movie} from "./movie.domain";
 import {YoubeAPILoader} from "./youtube.api.service";
 import {YTAPI} from "./ytapi.factory";
 import {VideoComponent} from "./video.component";
+import {StageComponent} from "./stage.comp";
 /**
  * Created by pakunert on 14.03.2016.
  */
@@ -28,10 +29,10 @@ import {VideoComponent} from "./video.component";
     <ul>
         <li *ngFor="#movie of movies">{{movie.name}}</li>
     </ul>
-    <video-comp ident="rhwaxOK1WX4"></video-comp>
+    <stage></stage>
     `,
     providers:[ObservableService,HTTP_PROVIDERS,YTAPI],
-    directives:[VideoComponent]
+    directives:[StageComponent]
 })
 export class App implements OnInit{
     message:string = 'hello';

@@ -19,7 +19,7 @@ export class ObservableService implements ObservableServiceIF{
     findMovies():Observable<Array<Movie>> {
 
         return this._http.get(
-            'data/movies.jsons'
+            'data/movies.json'
         ).map((result)=>result.json()
         ).do((result)=>{
             console.log(result);
