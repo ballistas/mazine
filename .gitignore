@@ -3,3 +3,4 @@ node_modules
 /evaluation/typings
 .idea
 /evaluation/npm-debug.log
+/evaluation/dist
