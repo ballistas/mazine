@@ -11,12 +11,14 @@ import * as RX from "rxjs/Rx";
 
 import {YTAPI} from "./ytapi.factory";
 import {Observable} from "rxjs/Observable";
+import DateTimeFormat = Intl.DateTimeFormat;
 
 @Component({
     selector:'video-comp',
     template:`
         <div>
-            Msg: <b *ngIf="msg">{{msg.payload}}</b>
+
+            {{seconds}} , Msg: <b *ngIf="msg">{{msg.payload}}</b>
         </div>
         <div id='{{video}}'></div>
         <button *ngIf="player" (click)="playVideo()">play</button>
@@ -29,12 +31,16 @@ export class VideoComponent implements OnInit{
 
     private player:any;
     private msg:{payload:string};
+    private seconds:number = 0;
 
     private $timer:RX.Observable<{at:number,payload:any}> = RX.Observable.timer(0,1000)
+        .do((second)=>{
+            this.seconds=second;
+        })
         .map((second)=>{
 
             let keys = [
-                {at:5,payload:'Welcome!!'},
+                {at:4,payload:'Welcome!!'},
                 {at:11,payload:'Nice Coffee!!!'},
                 {at:19,payload:'Yummy Hashbrowns [LINK]'},
                 {at:26,payload:'Lets ROLL!!!'}
@@ -67,6 +73,7 @@ export class VideoComponent implements OnInit{
                         }
                     );
                     event.target.playVideo();
+                    RX.Sch
                 },
                 onStateChange:(event)=>{
                     console.log(`change : ${event.data}`);
