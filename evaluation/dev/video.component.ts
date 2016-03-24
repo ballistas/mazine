@@ -12,6 +12,7 @@ import * as RX from "rxjs/Rx";
 import {YTAPI} from "./ytapi.factory";
 import {Observable} from "rxjs/Observable";
 import DateTimeFormat = Intl.DateTimeFormat;
+import PlayerState = YT.PlayerState;
 
 @Component({
     selector:'video-comp',
@@ -29,15 +30,18 @@ export class VideoComponent implements OnInit{
     @Input('ident')
     private video:string;
 
-    private player:any;
+    private player:YT.Player;
     private msg:{payload:string};
-    private seconds:number = 0;
+    private seconds:number;
 
     private $timer:RX.Observable<{at:number,payload:any}> = RX.Observable.timer(0,1000)
-        .do((second)=>{
-            this.seconds=second;
-        })
-        .map((second)=>{
+        .filter(()=>{
+
+            return this.player.getPlayerState()===YT.PlayerState.PLAYING;
+
+        }).map((second)=>{
+
+            this.seconds++;
 
             let keys = [
                 {at:4,payload:'Welcome!!'},
@@ -47,7 +51,7 @@ export class VideoComponent implements OnInit{
             ];
 
             for(let idx=0;idx < keys.length;idx++){
-                if(second==keys[idx].at){
+                if(this.seconds==keys[idx].at){
                     return keys[idx];
                 }
             }
@@ -73,10 +77,20 @@ export class VideoComponent implements OnInit{
                         }
                     );
                     event.target.playVideo();
-                    RX.Sch
                 },
                 onStateChange:(event)=>{
                     console.log(`change : ${event.data}`);
+
+                    switch(event.data){
+                        case YT.PlayerState.PLAYING:
+                            console.log(`state change: ${event.data} ,now Continue...`);
+                            this.seconds=Math.round(
+                                event.target.getCurrentTime()
+                            );
+                            break;
+                        default:
+                            console.log(`state change: ${event.data}, Default @ ${event.target.getCurrentTime()}`);
+                    }
                 }
             }
         ).subscribe(
