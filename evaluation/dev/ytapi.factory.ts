@@ -33,8 +33,8 @@ export class YTAPI{
                 ){
                     return new YT.Player(
                         video, {
-                        height: '390',
-                        width: '640',
+                        height: '195',
+                        width: '320',
                         videoId: video,
                         events:delegate
                     });

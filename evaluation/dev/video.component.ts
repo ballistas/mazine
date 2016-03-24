@@ -4,7 +4,9 @@
 import {
     Component,
     Input,
-    OnInit
+    Output,
+    OnInit,
+    EventEmitter
 } from 'angular2/core';
 
 import * as RX from "rxjs/Rx";
@@ -17,18 +19,15 @@ import PlayerState = YT.PlayerState;
 @Component({
     selector:'video-comp',
     template:`
-        <div>
-
-            {{seconds}} , Msg: <b *ngIf="key">{{key.payload}}</b>
-        </div>
         <div id='{{video}}'></div>
-        <button *ngIf="player" (click)="playVideo()">play</button>
-        
     `
 })
 export class VideoComponent implements OnInit{
+
     @Input('ident')
     private video:string;
+
+    private seconds:number = 0;
 
     private keys = [
         {at:4,payload:'Welcome!!'},
@@ -37,62 +36,52 @@ export class VideoComponent implements OnInit{
         {at:26,payload:'Lets ROLL!!!'}
 ]   ;
     private player:YT.Player;
-    private key:{payload:string};
-    private seconds:number = 0;
 
-    private $messenger = RX.Observable.fromEvent(
-        window,
-        'yt.control',
-        ()=>{
-
-            let result = {
-                current:Math.floor(this.player.getCurrentTime()),
-                message:{
-                    payload:'void'
-                }
-            };
-
-            console.log(`event!!! ${result.current}`);
-
-            //we wanna show message right before current time
-            for(let idx=0;idx < this.keys.length;idx++){
-                if(result.current < this.keys[idx].at){
-                    break;
-                }
-
-                result.message = this.keys[idx];
-            }
-
-            return result;
-        }
-    ).subscribe(
-        (control)=>{
-            this.seconds = control.current;
-            this.key = control.message;
-        }
-    );
+    @Output('key')
+    private $keys:EventEmitter<{at:number,payload:any}> = new EventEmitter();
 
     private $timer:RX.Observable<{at:number,payload:any}> = RX.Observable.timer(0,1000)
         .filter(()=>{
 
             return this.player.getPlayerState()===YT.PlayerState.PLAYING;
 
-        }).map((second)=>{
+        }).map(()=>{
 
             let key = null;
 
             for(let idx=0;idx < this.keys.length;idx++){
-                if(this.seconds < this.keys[idx].at){
+                if(this.seconds == this.keys[idx].at){
+                    key = this.keys[idx];
                     break;
                 }
-
-                key = this.keys[idx];
             }
 
             return key;
         }).do(()=>{
             this.seconds++;
-        }).filter((key)=>{
+        }).merge(
+            RX.Observable.fromEvent(
+                window,
+                'yt.control',
+                ()=>{
+
+                    let key = null;
+
+                    this.seconds = Math.round(this.player.getCurrentTime());
+
+                    //we wanna show message right before current time
+                    for(let idx=0;idx < this.keys.length;idx++){
+                        if(this.seconds < this.keys[idx].at){
+                            break;
+                        }
+
+                        key = this.keys[idx];
+                    }
+
+                    return key;
+                }
+            )
+        ).filter((key)=>{
             return key!=null;
         });
 
@@ -108,7 +97,10 @@ export class VideoComponent implements OnInit{
 
                     this.$timer.subscribe(
                         (key)=>{
-                            this.key = key;
+                            console.log(`emit ${key.payload}`);
+                            this.$keys.emit(
+                                key
+                            );
                         }
                     );
                     event.target.playVideo();
