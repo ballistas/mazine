@@ -83,6 +83,8 @@ export class VideoComponent implements OnInit{
             )
         ).filter((key)=>{
             return key!=null;
+        }).distinctUntilChanged((key1,key2)=>{
+            return key1.at==key2.at;
         });
 
     constructor(private _api:YTAPI){
