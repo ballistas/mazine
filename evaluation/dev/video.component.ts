@@ -30,9 +30,42 @@ export class VideoComponent implements OnInit{
     @Input('ident')
     private video:string;
 
+    private keys = [
+        {at:4,payload:'Welcome!!'},
+        {at:11,payload:'Nice Coffee!!!'},
+        {at:19,payload:'Yummy Hashbrowns [LINK]'},
+        {at:26,payload:'Lets ROLL!!!'}
+]   ;
     private player:YT.Player;
     private msg:{payload:string};
-    private seconds:number;
+    private seconds:number = 0;
+
+    private $messenger = RX.Observable.fromEvent(
+        window,
+        'yt.control',
+        ()=>{
+            let result = {
+                current:Math.floor(this.player.getCurrentTime()),
+                message:{
+                    payload:'void'
+                }
+            };
+
+            //we wanna show message right before current time
+            for(let idx=0;idx < this.keys.length;idx++){
+                if(result.current > this.keys[idx].at){
+                    result.message = this.keys[idx];
+                }
+            }
+
+            return result;
+        }
+    ).subscribe(
+        (control)=>{
+            this.seconds = control.current;
+            this.msg = control.message;
+        }
+    );
 
     private $timer:RX.Observable<{at:number,payload:any}> = RX.Observable.timer(0,1000)
         .filter(()=>{
@@ -43,16 +76,9 @@ export class VideoComponent implements OnInit{
 
             this.seconds++;
 
-            let keys = [
-                {at:4,payload:'Welcome!!'},
-                {at:11,payload:'Nice Coffee!!!'},
-                {at:19,payload:'Yummy Hashbrowns [LINK]'},
-                {at:26,payload:'Lets ROLL!!!'}
-            ];
-
-            for(let idx=0;idx < keys.length;idx++){
-                if(this.seconds==keys[idx].at){
-                    return keys[idx];
+            for(let idx=0;idx < this.keys.length;idx++){
+                if(this.seconds==this.keys[idx].at){
+                    return this.keys[idx];
                 }
             }
 
@@ -80,13 +106,13 @@ export class VideoComponent implements OnInit{
                 },
                 onStateChange:(event)=>{
                     console.log(`change : ${event.data}`);
-
+                    window.dispatchEvent(
+                        new Event('yt.control')
+                    );
                     switch(event.data){
                         case YT.PlayerState.PLAYING:
                             console.log(`state change: ${event.data} ,now Continue...`);
-                            this.seconds=Math.round(
-                                event.target.getCurrentTime()
-                            );
+
                             break;
                         default:
                             console.log(`state change: ${event.data}, Default @ ${event.target.getCurrentTime()}`);
