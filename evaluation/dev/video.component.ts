@@ -45,6 +45,8 @@ export class VideoComponent implements OnInit{
 
             return this.player.getPlayerState()===YT.PlayerState.PLAYING;
 
+        }).do(()=>{
+            this.seconds++;
         }).map(()=>{
 
             let key = null;
@@ -57,8 +59,6 @@ export class VideoComponent implements OnInit{
             }
 
             return key;
-        }).do(()=>{
-            this.seconds++;
         }).merge(
             RX.Observable.fromEvent(
                 window,
