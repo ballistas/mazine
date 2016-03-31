@@ -18,6 +18,9 @@ export class BubbleComponent{
     @NG.Input('content')
     private content:string;
 
+    @NG.Input('index')
+    private index:number;
+
     state:State=State.INIT;
 
     constructor(
@@ -33,7 +36,7 @@ export class BubbleComponent{
         return this._show.start(
             this._element.nativeElement
         ).onComplete(()=>{
-
+            console.log('show done state==VISIBLE');
             this.state=State.VISIBLE;
         });
     }
@@ -45,6 +48,7 @@ export class BubbleComponent{
         return this._discard.start(
             this._element.nativeElement
         ).onComplete(()=>{
+            console.log('hide done state==HIDDEN');
             this.state=State.HIDDDEN;
         });
     }
@@ -61,8 +65,8 @@ export class BubbleComponent{
         let builder = this._animBuilder.css()
             .setDuration(1000)
             .setFromStyles({
-                opacity:0.5,
-                transform:"translate(100px,0px)"
+                opacity:0,
+                transform:"translate(-200px,0px)"
             })
             .setToStyles({
                 opacity:1,
@@ -83,7 +87,7 @@ export class BubbleComponent{
             })
             .setToStyles({
                 opacity:0,
-                transform:"translate(0px,100px)"
+                transform:"translate(200px,0px)"
             }).removeClass('visible');
 
         return builder;

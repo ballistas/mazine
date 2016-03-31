@@ -13,7 +13,7 @@ import {BubbleComponent, State} from "./bubble.comp";
     template:`
         <div>
             <h3>Stage</h3>
-            <video-comp (key)="show($event)" ident="rhwaxOK1WX4"></video-comp>
+            <!--video-comp (key)="show($event)" ident="rhwaxOK1WX4"></video-comp-->
             <div bubble-comp *ngFor="#message of messages" [content]="message">
             </div>            
         </div>
@@ -23,11 +23,15 @@ import {BubbleComponent, State} from "./bubble.comp";
 export class StageComponent implements NG.OnInit{
     @NG.ViewChildren(BubbleComponent)
     private _bubblesNew:NG.QueryList<BubbleComponent>;
+    private $pusher:RX.Observable<string> = RX.Observable.timer(2000, 1000)
+        .map((index)=>{
+            return `Message ${index}`;
+        });
 
-    private messages:Array<string>=[];
+    messages:Array<string>=[];
 
     constructor(){
-    }
+     }
 
     ngAfterViewInit(){
         //in and out
@@ -52,11 +56,23 @@ export class StageComponent implements NG.OnInit{
                 bubble.hide().onComplete(()=> {
                     this.messages.pop();
                 });
+
             }
         });
+
+        this.$pusher.subscribe(
+            (message)=>{
+                console.log(`${message} ${this.messages.length}`);
+                this.messages.push(`${message} ${this.messages.length}`);
+            },
+            (error)=>{
+                console.log(`${error}`);
+            }
+        );
     }
 
     ngOnInit(){
+
 
     }
 
