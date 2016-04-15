@@ -6,7 +6,7 @@ import * as NG from 'angular2/core';
 import * as RX from 'rxjs/Rx';
 import {VideoComponent} from "./video.component";
 import {ContentComponent} from "./content.comp";
-import {BubbleComponent, State} from "./bubble.comp";
+import {BubbleComponent, State, Message} from "./bubble.comp";
 
 @NG.Component({
     selector:'stage',
@@ -14,7 +14,7 @@ import {BubbleComponent, State} from "./bubble.comp";
         <div>
             <h3>Stage</h3>
             <!--video-comp (key)="show($event)" ident="rhwaxOK1WX4"></video-comp-->
-            <div bubble-comp *ngFor="#message of messages" [content]="message">
+            <div bubble-comp *ngFor="#message of messages" [message]="message">
             </div>            
         </div>
     `,
@@ -23,19 +23,20 @@ import {BubbleComponent, State} from "./bubble.comp";
 export class StageComponent implements NG.OnInit{
     @NG.ViewChildren(BubbleComponent)
     private _bubblesNew:NG.QueryList<BubbleComponent>;
-    private $pusher:RX.Observable<string> = RX.Observable.timer(2000, 1000)
+    private $pusher:RX.Observable<string> = RX.Observable.timer(0, 1000)
         .map((index)=>{
             return `Message ${index}`;
         });
 
-    messages:Array<string>=[];
+    messages:Array<Message>=[];
 
     constructor(){
      }
 
     ngAfterViewInit(){
         //in and out
-        this._bubblesNew.changes.filter((query:NG.QueryList<BubbleComponent>)=>{
+        /*
+         this._bubblesNew.changes.filter((query:NG.QueryList<BubbleComponent>)=>{
 
             return query.filter((bubble:BubbleComponent)=>{
                 return bubble.state==State.VISIBLE
@@ -53,17 +54,28 @@ export class StageComponent implements NG.OnInit{
             if(bubble.state==State.INIT) {
                 bubble.show();
             }else{
-                bubble.hide().onComplete(()=> {
-                    this.messages.pop();
-                });
+                bubble.hide();
 
             }
-        });
+        });*/
+    }
+
+    ngOnInit(){
+        let that = this;
 
         this.$pusher.subscribe(
             (message)=>{
-                console.log(`${message} ${this.messages.length}`);
-                this.messages.push(`${message} ${this.messages.length}`);
+
+                that.messages.push({
+                        state:State.INIT,
+                        content:message
+                });
+
+                if(that.messages.length>=2){
+
+                    that.messages[0].state=State.VISIBLE;
+                }
+
             },
             (error)=>{
                 console.log(`${error}`);
@@ -71,16 +83,12 @@ export class StageComponent implements NG.OnInit{
         );
     }
 
-    ngOnInit(){
-
-
-    }
-
     show(event){
         //simply pushing data
-        this.messages.push(
-            event.payload
-        );
+        this.messages.push({
+            state:State.INIT,
+            content:'Demo'
+        });
     }
 
 

@@ -8,15 +8,16 @@ import * as AN from "angular2/animate";
 @NG.Component({
     selector:'[bubble-comp]',
     template:`
-        <div>{{content}}</div>
+        <div>{{message.content}} {{message.state}}</div>
+        
     `
 })
 export class BubbleComponent{
     private _show:AN.CssAnimationBuilder;
     private _discard:AN.CssAnimationBuilder;
 
-    @NG.Input('content')
-    private content:string;
+    @NG.Input('message')
+    private message:Message;
 
     @NG.Input('index')
     private index:number;
@@ -101,5 +102,10 @@ export enum State{
     HIDING,
     HIDDDEN
 
+}
+
+export class Message{
+    public content:string;
+    public state:State;
 }
 
