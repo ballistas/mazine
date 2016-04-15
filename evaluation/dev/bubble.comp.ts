@@ -4,23 +4,28 @@
 
 import * as NG from "angular2/core";
 import * as AN from "angular2/animate";
+import * as RX from "rxjs/RX";
 
 @NG.Component({
     selector:'[bubble-comp]',
+    changeDetection: NG.ChangeDetectionStrategy.OnPush,
     template:`
-        <div>{{content}}</div>
+        <div>{{message.content}}</div>
     `
 })
 export class BubbleComponent{
     private _show:AN.CssAnimationBuilder;
     private _discard:AN.CssAnimationBuilder;
 
-    @NG.Input('content')
-    private content:string;
+    @NG.Input('message')
+    public message:MessageIF;
 
+    @NG.Input('monitor')
+    private callback:StateCallbackIF;
     state:State=State.INIT;
 
     constructor(
+        public _detector:NG.ChangeDetectorRef,
         private _animBuilder:AN.AnimationBuilder,
         private _element:NG.ElementRef){
 
@@ -30,11 +35,24 @@ export class BubbleComponent{
 
         this.state=State.SHOWING;
 
+        this.callback.stateChange(
+            this,
+            State.INIT,
+            State.SHOWING
+        );
+
         return this._show.start(
             this._element.nativeElement
         ).onComplete(()=>{
 
             this.state=State.VISIBLE;
+
+            this.callback.stateChange(
+                this,
+                State.SHOWING,
+                State.VISIBLE
+            );
+
         });
     }
 
@@ -42,10 +60,22 @@ export class BubbleComponent{
 
         this.state = State.HIDING;
 
+        this.callback.stateChange(
+            this,
+            State.VISIBLE,
+            State.HIDING
+        );
+
         return this._discard.start(
             this._element.nativeElement
         ).onComplete(()=>{
             this.state=State.HIDDDEN;
+
+            this.callback.stateChange(
+                this,
+                State.HIDING,
+                State.HIDDDEN
+            );
         });
     }
 
@@ -54,6 +84,11 @@ export class BubbleComponent{
 
         this._show = this.buildShow();
         this._discard = this.buildDiscard();
+    }
+
+    public getElement():NG.ElementRef{
+
+        return this._element;
     }
 
     private buildShow():AN.CssAnimationBuilder{
@@ -99,3 +134,16 @@ export enum State{
 
 }
 
+//evtl. auch ueber Observer-Pattern
+export interface StateCallbackIF{
+
+    stateChange(
+        bubble:BubbleComponent,
+        from:State,
+        to:State
+    ):void;
+}
+
+export interface MessageIF{
+    content:string;
+}

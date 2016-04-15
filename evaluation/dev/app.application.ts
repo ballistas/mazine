@@ -1,5 +1,6 @@
 ///<reference path="../node_modules/angular2/typings/browser.d.ts" />
 ///<reference path="../node_modules/zone.js/dist/zone.js.d.ts" />
+///<reference path='../node_modules/immutable/dist/immutable.d.ts' />
 ///<reference path='../typings/youtube/youtube.d.ts' />
 
 import "rxjs/add/operator/map";
