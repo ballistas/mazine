@@ -52,8 +52,63 @@ module domain{
 
     export class Scene{
 
-        public action(role:Role,at:number):void{
 
+
+        role(qualifier:string):Role{
+
+            return new Role(
+                this,
+                qualifier
+            );
+        }
+
+        event
+    }
+
+
+
+
+    /**
+     * a role is performed by an actor, who's skills are matching.
+     *
+     * A Role represents the abstract need, whereas the actor performs
+     * the role in a Plays physical performance.
+     *
+     * e.g.
+     *
+     * A role may require a Video-Skill. It will enter the stage in Scene 2 of Act 2, @30 seconds
+     * from scene start.
+     *
+     * It is up to the play to decide, which actor has the skills, and is not currently playing. So, a
+     * video-component (as an actor), may have the skill to show a video.
+     *
+     *
+     */
+    export class Role{
+
+        constructor(
+            private _scene:Scene,
+            private _qualifier:string
+        ){}
+
+        public act(acting:(scene:Scene,role:Role)=>void):Role{
+
+            return this;
+        }
+
+        public at(event:EventType,handler:(scene:Scene,role:Role)=>void){
+
+            this._scene.$events.filter((event)=>{
+
+                return event === event.type;
+
+            }).subsribe((event)=>{
+
+                handler(
+                    event.scene,
+                    this
+                )
+            });
         }
     }
 
@@ -64,12 +119,11 @@ module domain{
 
             let scene = new Scene();
 
-            let Factory.Actor = scene.role('producer')
+            scene.role('producer')
                 .act((scene,role)=>{
 
-                    scene.event(
+                    role.at(
                         Scene.Start,
-                        role,
                         (performance,event,role)=>{
 
                             role.enter(
@@ -79,9 +133,8 @@ module domain{
                     );
 
                     //Event play
-                    scene.event(
+                    role.at(
                         Scene.End,
-                        role,
                         (performance,event,role)=>{
 
                             role.leave(
@@ -90,9 +143,8 @@ module domain{
                         }
                     );
                     //Timed-play
-                    scene.at(
+                    role.at(
                         10,
-                        role,
                         (performance,event,role)=>{
 
                             role.message(
@@ -153,37 +205,6 @@ module domain{
                 new Stage()
             ).cast('publisher'  ,VideoComponent
             ).cast('consumer'   ,MessageComponent);
-        }
-    }
-
-    /**
-     * a role is performed by an actor, who's skills are matching.
-     *
-     * A Role represents the abstract need, whereas the actor performs
-     * the role in a Plays physical performance.
-     *
-     * e.g.
-     *
-     * A role may require a Video-Skill. It will enter the stage in Scene 2 of Act 2, @30 seconds
-     * from scene start.
-     *
-     * It is up to the play to decide, which actor has the skills, and is not currently playing. So, a
-     * video-component (as an actor), may have the skill to show a video.
-     *
-     *
-     */
-    export class Role{
-
-        public performIn(scene:Scene):Action{
-
-            return scene.action(
-                Action.Enter
-            );
-        }
-
-        public requires():Skill[]{
-
-            return [Skill.PLAYVIDEO];
         }
     }
 
