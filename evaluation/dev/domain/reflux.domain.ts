@@ -52,7 +52,7 @@ module domain{
 
     export class Scene{
 
-
+        private $_events:Observable<Event> =
 
         role(qualifier:string):Role{
 
@@ -62,7 +62,7 @@ module domain{
             );
         }
 
-        event
+
     }
 
 
@@ -91,12 +91,8 @@ module domain{
             private _qualifier:string
         ){}
 
-        public act(acting:(scene:Scene,role:Role)=>void):Role{
 
-            return this;
-        }
-
-        public at(event:EventType,handler:(scene:Scene,role:Role)=>void){
+        public at(event:EventType | number,handler:(scene:Scene,role:Role)=>void){
 
             this._scene.$events.filter((event)=>{
 
@@ -112,99 +108,99 @@ module domain{
         }
     }
 
-
     export class DSLdemo{
 
         public dsl(){
 
             let scene = new Scene();
 
-            scene.role('producer')
-                .act((scene,role)=>{
+            let role = scene.role('producer')
+                 .at(
+                     Scene.Start,
+                     (performance,event,role)=>{
 
-                    role.at(
-                        Scene.Start,
-                        (performance,event,role)=>{
+                        role.enter(
+                            performance
+                        );
+                    }
+                )//Event play
+                .at(
+                    Scene.End,
+                    (performance,event,role)=>{
 
-                            role.enter(
-                                performance
-                            );
-                        }
-                    );
+                        role.leave(
+                            performance
+                        );
+                    }
+                )
+                //Timed-play
+                .at(
+                    10,
+                    (performance,event,role)=>{
 
-                    //Event play
-                    role.at(
-                        Scene.End,
-                        (performance,event,role)=>{
+                        role.message(
+                          'what da fuck, that makes sense'
+                        );
 
-                            role.leave(
-                                performance
-                            );
-                        }
-                    );
-                    //Timed-play
-                    role.at(
-                        10,
-                        (performance,event,role)=>{
-
-                            role.message(
-                              'what da fuck, that makes sense'
-                            );
-
-                            role.message({
-                                key:'1234',
-                                type:Type.CONTENT
-                            });
-                        }
-                    );
-
-                    //Dependend play, may be implemented as general hooks for actor
-                    scene.when(role,(performance,role)=>{
-
-                        //rather if, no -- faster with observers
-                        performance.onPause(role,(performance,role)=>{
-
-                            let actor = performance.actorFor(role);
-
-                            actor.pause();
+                        role.message({
+                            key:'1234',
+                            type:Type.CONTENT
                         });
+                    }
+                );
 
-                        performance.onStop(role,(performance,role)=>{
+                //Dependend play, may be implemented as general hooks for actor
+                scene.when(role,(performance,role)=>{
 
-                            let actor = performance.actorFor(role);
+                    //rather if, no -- faster with observers
+                    performance.onPause(role,(performance,role)=>{
 
-                            actor.stop();
-                        });
+                        let actor = performance.actorFor(role);
 
-                        performance.onPlay(role,(performance,role)=>{
-
-                            let actor = performance.actorFor(role);
-
-                            actor.play();
-                        });
-
+                        actor.pause();
                     });
+
+                    performance.onStop(role,(performance,role)=>{
+
+                        let actor = performance.actorFor(role);
+
+                        actor.stop();
+                    });
+
+                    performance.onPlay(role,(performance,role)=>{
+
+                        let actor = performance.actorFor(role);
+
+                        actor.play();
+                    });
+
                 });
 
 
-            scene1.role('consumer')
-                .act((performance,role)=>{
+                scene.role('consumer')
+                    .listenTo('producer')
+                    .messages((message)=>{
+                        return message;
+                    })
+                    .do((role,message)=>{
 
-                    role.listen('producer')
-                        .messages((message)=>{
-                            return message;
-                        })
-                        .do((role,message)=>{
+                        role.message(message)
+                    });
 
-                            role.message(message)
-                        });
 
-                });
+            //public stage (vs. conent editing stage)
+            let mazine:Stage = Stage.mazine();
 
-            let performance:Perfomance = scene.performOn(
-                new Stage()
-            ).cast('publisher'  ,VideoComponent
-            ).cast('consumer'   ,MessageComponent);
+            let performance:Performance = Play.performOn(
+                mazine
+            ).cast('publisher'  ,Actors.video()
+            ).cast('consumer'   ,Actors.gazette());
+
+            performance.show();;
+            performance.pause();
+            performance.continue();
+            performance.restart()
+            performance.stop();
         }
     }
 
