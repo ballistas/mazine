@@ -1,0 +1,34 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>[maazine]</title>
+    <script src="node_modules/systemjs/dist/system-polyfills.js"></script>
+    <script src="node_modules/systemjs/dist/system.js"></script>
+    <script src="node_modules/angular2/bundles/angular2-polyfills.js.js"></script>
+    <script src="node_modules/rxjs/bundles/Rx.js"></script>
+    <script src="node_modules/angular2/bundles/angular2.dev.js"></script>
+
+    <script>
+
+        System.config({
+            defaultExtension:true,
+            paths:{
+                '*':'node_modules/*',
+                'dist':'dist/'
+            },
+            packageConfigPaths:['node_modules/*/package.json']
+        });
+
+        System.import('./boot')
+            .then(
+                null,
+                console.error.bind(console)
+            );
+
+    </script>
+</head>
+<body>
+
+</body>
+</html>
