@@ -1,6 +1,5 @@
 node_modules
 typings
-*.iml
 .idea
 */npm-debug.log
 */dist
