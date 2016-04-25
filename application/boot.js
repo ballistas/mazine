@@ -2,22 +2,22 @@
  * Created by pakunert on 21.04.2016.
  */
 
-System.register(['angular2/platform/browser','/dist/app.application'],function(exports){
-    var browser,application;
+System.register(['angular2/platform/browser','./dist/application.app'],function(exports){
+    var browser_1,application_1;
 
     return {
         setters: [
             function (browser) {
 
-                this.browser = browser;
+                browser_1 = browser;
             },
             function (app) {
-                this.application = app;
+                application_1 = app;
             }
         ],
         execute: function () {
-            browser.bootstrap(
-                application.App, []
+            browser_1.bootstrap(
+                application_1.App, []
             );
         }
     }

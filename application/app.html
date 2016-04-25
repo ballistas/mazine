@@ -5,14 +5,14 @@
     <title>[maazine]</title>
     <script src="node_modules/systemjs/dist/system-polyfills.js"></script>
     <script src="node_modules/systemjs/dist/system.js"></script>
-    <script src="node_modules/angular2/bundles/angular2-polyfills.js.js"></script>
+    <script src="node_modules/angular2/bundles/angular2-polyfills.js"></script>
     <script src="node_modules/rxjs/bundles/Rx.js"></script>
     <script src="node_modules/angular2/bundles/angular2.dev.js"></script>
 
     <script>
 
         System.config({
-            defaultExtension:true,
+            defaultJSExtensions:true,
             paths:{
                 '*':'node_modules/*',
                 'dist':'dist/'
@@ -29,6 +29,6 @@
     </script>
 </head>
 <body>
-
+    <app-cmp>Loading ...</app-cmp>
 </body>
 </html>
