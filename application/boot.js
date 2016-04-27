@@ -15,6 +15,7 @@ System.register(['angular2/platform/browser','./dist/application.app'],function(
                 application_1 = app;
             }
         ],
+        
         execute: function () {
             browser_1.bootstrap(
                 application_1.App, []
