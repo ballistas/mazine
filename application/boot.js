@@ -2,7 +2,7 @@
  * Created by pakunert on 21.04.2016.
  */
 
-System.register(['angular2/platform/browser','./dist/application.app'],function(exports){
+System.register(['@angular/platform-browser-dynamic','./dist/application.app'],function(exports){
     var browser_1,application_1;
 
     return {

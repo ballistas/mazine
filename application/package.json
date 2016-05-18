@@ -4,23 +4,33 @@
   "description": "application/core",
   "main": "index.js",
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1"
+    "start":"http-server -c-1 -o -p 8875",
+    "test": "karma start karma.conf.js"
   },
   "author": "",
   "license": "ISC",
   "dependencies": {
-    "angular2": "^2.0.0-beta.15",
+    "@angular/common": "^2.0.0-rc.0",
+    "@angular/compiler": "^2.0.0-rc.0",
+    "@angular/core": "^2.0.0-rc.0",
+    "@angular/http": "^2.0.0-rc.0",
+    "@angular/platform-browser": "^2.0.0-rc.0",
+    "@angular/platform-browser-dynamic": "^2.0.0-rc.0",
+    "es6-promise": "^3.1.2",
     "es6-shim": "^0.35.0",
-    "rebound": "github:facebook/rebound-js",
     "reflect-metadata": "^0.1.2",
-    "rxjs": "^5.0.0-beta.2",
+    "rxjs": "^5.0.0-beta.6",
     "systemjs": "^0.19.26",
-    "zone.js": "^0.6.10"
+    "zone.js": "^0.6.12"
   },
   "devDependencies": {
-    "gulp-jasmine": "^2.3.0",
+    "http-server": "^0.9.0",
     "jasmine-core": "^2.4.1",
-    "jasmine-reporters": "^2.1.1",
+    "karma": "^0.13.22",
+    "karma-chrome-launcher": "^0.2.2",
+    "karma-coverage": "^0.5.3",
+    "karma-jasmine": "^0.3.6",
+    "remap-istanbul": "^0.6.3",
     "typescript": "^1.8.10",
     "typings": "^0.8.1"
   }

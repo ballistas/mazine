@@ -1,6 +1,6 @@
 ///<reference path="../typings/jasmine/jasmine" />
 
-import * as ng2 from "angular2/testing";
+import * as ng2 from "@angular/core/testing";
 import * as play from "./play.domain";
 
 /**

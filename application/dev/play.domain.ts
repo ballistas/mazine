@@ -2,7 +2,7 @@
  * Created by pakunert on 25.04.2016.
  */
 
-import * as angular from 'angular2/core';
+import * as angular from '@angular/core';
 import * as user from './user.domain';
 import * as rxjs from 'rxjs/RX';
 
