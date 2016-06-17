@@ -4,8 +4,8 @@
 
 const gulp = require('gulp');
 const tsCompiler = require('gulp-typescript');
-//const jasmine = require('gulp-jasmine');
-//const reporters = require('jasmine-reporters');
+const jasmine = require('gulp-jasmine');
+const reporters = require('jasmine-reporters');
 
 const tsProject = tsCompiler.createProject('tsconfig.json');
 

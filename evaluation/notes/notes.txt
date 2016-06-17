@@ -24,3 +24,7 @@ Verzeichnis-Struktur
     * style
     * js
     * jsmap
+
+Fehler
+* jasmine.Dependencies --> use typescript-compiler in node-modules
+* Promise --> ///<reference path="../node_modules/angular2/typings/browser.d.ts" />

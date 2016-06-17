@@ -10,23 +10,15 @@
     <script src="node_modules/rxjs/bundles/Rx.js"></script>
     <script src="node_modules/angular2/bundles/angular2.dev.js"></script>
 
+    <!--system.js Konfiguration-->
+    <script src="system-config.js"></script>
+
     <script>
-
-        System.config({
-            defaultJSExtensions:true,
-            paths:{
-                '*':'node_modules/*',
-                'dist':'dist/'
-            },
-            packageConfigPaths:['node_modules/*/package.json']
-        });
-
-        System.import('./boot')
-            .then(
-                null,
-                console.error.bind(console)
-            );
-
+        System.import('boot.js').catch(
+            function (err){
+                console.error(err);
+            }
+        );
     </script>
     <style>
         div.play{
@@ -39,14 +31,6 @@
     </script>
 </head>
 <body>
-    <!--app-cmp>Loading ...</app-cmp-->
-    <div>
-        <div class="play">
-            <img src="style/demo.play.png">
-        </div>
-        <div class="play">
-            <img src="style/demo.play.png">
-        </div>
-    </div>
+    <app-cmp>Loading...</app-cmp>
 </body>
 </html>

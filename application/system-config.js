@@ -2,12 +2,11 @@ System.config({
     map: {
         'rxjs': 'node_modules/rxjs',
         '@angular': 'node_modules/@angular',
-        'app': 'dist'
+        'app':'dist'
     },
     packages: {
-        'app': {
-            main: 'boot.js',
-            defaultExtension: 'js'
+        'app':{
+            defaultExtension:'js'
         },
         '@angular/core': {
             main: 'index.js',
