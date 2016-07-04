@@ -13,3 +13,10 @@ export namespace mixins{
 
     export interface Rate{}
 }
+
+export namespace valueobjects{
+
+    export class EMail{
+        
+    }
+}

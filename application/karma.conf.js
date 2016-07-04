@@ -28,8 +28,8 @@ module.exports = function(config) {
             {pattern: 'karma-test-shim.js', included: true, watched: true},
 
             // Angular
-            {pattern: 'node_modules/@angular/**/*.js', included: false, watched: true},
-            {pattern: 'node_modules/@angular/**/*.js.map', included: false, watched: true},
+            {pattern: 'node_modules/@ngcore/**/*.js', included: false, watched: true},
+            {pattern: 'node_modules/@ngcore/**/*.js.map', included: false, watched: true},
 
             // Our app
             {pattern: 'dist/**/*.js', included: false, watched: true},

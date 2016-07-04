@@ -6,6 +6,9 @@ import * as angular from '@angular/core';
 import * as user from './user.domain';
 import * as rxjs from 'rxjs/RX';
 
+/**
+ * written by author
+ */
 export class Script{
 
     constructor(
@@ -14,7 +17,7 @@ export class Script{
 }
 
 /**
- * writes a script
+ * has a user profile
  */
 export class Author{
     constructor(

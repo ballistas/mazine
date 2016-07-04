@@ -31,7 +31,7 @@ System.config({
 System.config({
     map: {
         'rxjs': 'base/node_modules/rxjs',
-        '@angular': 'base/node_modules/@angular',
+        '@angular': 'base/node_modules/@ngcore',
         'app': ''
     },
     packages: {
@@ -74,8 +74,8 @@ System.config({
 });
 
 Promise.all([
-        System.import('@angular/core'),
-        System.import('@angular/platform-browser-dynamic')
+        System.import('@ngcore/core'),
+        System.import('@ngcore/platform-browser-dynamic')
     ])
     .then(
         function (providers) {

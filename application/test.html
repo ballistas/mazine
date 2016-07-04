@@ -26,7 +26,12 @@
 
 
     // #3. Import the spec file explicitly
-    System.import('app/play.domain.spec')
+    System.import(
+        //'app/play.domain.spec')
+
+        'app/user.domain.spec'
+    )
+
 
     // #4. wait for all imports to load ...
     //     then re-execute `window.onload` which
